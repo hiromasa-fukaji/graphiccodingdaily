@@ -1,4 +1,5 @@
 let system;
+let fixData = null; // fix.jsonの内容を格納
 let balls = []; // ブロック崩しのボール
 let particleStep = 4; // パーティクルステップ（Tweakpaneで調整可能）
 let particlePane; // パーティクル用のTweakpane
@@ -17,12 +18,14 @@ function setup() {
   system = new DesignSystem();
   c.drop((file) => system.handleFileDrop(file, mouseX, mouseY));
 
-  // fix.jsonを読み込んで内容をconsoleに出力
+  // fix.jsonを読み込んでDesignSystemに反映
   fetch('fix.json')
     .then(response => response.json())
     .then(data => {
+      fixData = data;
       console.log('fix.jsonの内容:', data);
-      // ここでdataを使ってレイアウト反映などの処理が可能
+      // DesignSystemにJSONデータをインポート
+      system.importJSON(data);
     })
     .catch(error => {
       console.error('fix.jsonの読み込みに失敗:', error);
