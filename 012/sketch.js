@@ -16,6 +16,17 @@ function setup() {
   
   system = new DesignSystem();
   c.drop((file) => system.handleFileDrop(file, mouseX, mouseY));
+
+  // fix.jsonを読み込んで内容をconsoleに出力
+  fetch('fix.json')
+    .then(response => response.json())
+    .then(data => {
+      console.log('fix.jsonの内容:', data);
+      // ここでdataを使ってレイアウト反映などの処理が可能
+    })
+    .catch(error => {
+      console.error('fix.jsonの読み込みに失敗:', error);
+    });
   
   // ★パーティクルステップ用のTweakpaneを作成
   particlePane = new Tweakpane.Pane({
