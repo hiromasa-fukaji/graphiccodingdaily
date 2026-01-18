@@ -31,10 +31,10 @@ function setup() {
   });
 
 
-  // 画像書き出しボタンを作成
-  let imgBtn = createButton('画像で書き出し');
-  imgBtn.position(20, 20);
-  imgBtn.mousePressed(exportImage);
+  // // 画像書き出しボタンを作成
+  // let imgBtn = createButton('画像で書き出し');
+  // imgBtn.position(20, 20);
+  // imgBtn.mousePressed(exportImage);
 }
 // 画像書き出し関数
 function exportImage() {
@@ -56,7 +56,7 @@ function draw() {
   noStroke();
   textAlign(LEFT, TOP);
   textSize(12);
-  text('点の位置を母点としてボロノイ図を描画して。文字の形が細胞の集合のように見えるように。', 5, 5);
+  text('点を丸ではなく、aからzのランダムなアルファベットに置き換えて。文字の集合体で大きな文字を作って。', 5, 5);
   
 
   fill(255);
