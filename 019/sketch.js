@@ -48,12 +48,12 @@ function windowResized() {
 
 
 function draw() {
-  background(00);
+  background(0);
 
   fill("#ffff00");
   textAlign(LEFT, TOP);
   textSize(12);
-  text('各y座標ごとに異なる速度で文字を横にスライドさせ、グリッチのようなスリットスキャン効果', 5, 5);
+  text('各y座標ごとに異なる速度で文字を横にスライドさせ、グリッチのようなスリットスキャン効果を作って。', 5, 5);
 
   fill(255);
   noStroke();
