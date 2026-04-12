@@ -4,7 +4,7 @@ let bounds;
 
 function preload() {
   // フォントを読み込む
-  myFont = loadFont('IBMPlexMono-Regular.ttf');
+  myFont = loadFont('CormorantGaramond-bold.ttf');
 }
 
 function setup() {
@@ -21,10 +21,10 @@ function setup() {
   });
 
 
-  // 画像書き出しボタンを作成
-  let imgBtn = createButton('画像で書き出し');
-  imgBtn.position(20, 20);
-  imgBtn.mousePressed(exportImage);
+  // // 画像書き出しボタンを作成
+  // let imgBtn = createButton('画像で書き出し');
+  // imgBtn.position(20, 20);
+  // imgBtn.mousePressed(exportImage);
 }
 // 画像書き出し関数
 function exportImage() {
@@ -38,9 +38,15 @@ function windowResized() {
 
 
 function draw() {
-  background(120);
+  background(255);
 
-  fill(255);
+    // コメントを画面上部に表示
+  fill("#000000");
+  textAlign(LEFT, TOP);
+  textSize(12);
+  text('textToPointsで取得した文字のアウトライン頂点にノイズをかけてウネウネと動くアニメーションを作って', 5, 5);
+
+  fill(0);
   noStroke();
   let centerX = (width - bounds.w) / 2 - bounds.x;
   let centerY = (height - bounds.h) / 2 - bounds.y;
@@ -53,47 +59,34 @@ function draw() {
   //   //rect(pt.x, pt.y, 10, 10);
   // }
 
-  beginShape();
-  for (let p of points) {
-    let nx = noise(p.x * 0.1, p.y * 0.1, frameCount * 0.01) * 100-100/2;
-    let ny = noise(p.y * 0.1, p.x * 0.1, frameCount * 0.01) * 100-100/2;
-
-    // 3. ノイズを加えた座標に線を引く
-    vertex(p.x + nx, p.y + ny);
+  // 隣接点間の距離が大きく跳んだら別の輪郭とみなしてグループ化
+  let contours = [];
+  let threshold = 50; // この距離以上離れたら新しい輪郭
+  for (let i = 0; i < points.length; i++) {
+    let p = points[i];
+    if (i === 0) {
+      contours.push([p]);
+    } else {
+      let prev = points[i - 1];
+      let d = dist(prev.x, prev.y, p.x, p.y);
+      if (d > threshold) {
+        contours.push([]);
+      }
+      contours[contours.length - 1].push(p);
+    }
   }
-  endShape();
+
+  // 各輪郭を独立して描画
+  for (let contour of contours) {
+    beginShape();
+    for (let p of contour) {
+      let nx = noise(p.x * 0.1, p.y * 0.1, frameCount * 0.01) * 100 - 100 / 2;
+      let ny = noise(p.y * 0.1, p.x * 0.1, frameCount * 0.01) * 100 - 100 / 2;
+      vertex(p.x + nx, p.y + ny);
+    }
+    endShape(CLOSE);
+  }
   pop();
-  
+
 
 }
-
-
-// function draw() {
-//   background(120);
-
-//   textFont('helvetica');
-//   textSize(500);
-//   fill(255);
-//   textAlign(CENTER, CENTER);
-//   text('A', width / 2, height / 2);
-
-// }
-
-// // SVG書き出し関数
-// function exportSVG() {
-//   // SVGの内容を手動で生成
-//   const w = windowWidth;
-//   const h = windowHeight;
-//   const fontSize = 500;
-//   const svg = `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">\n  <rect width="100%" height="100%" fill="rgb(120,120,120)"/>\n  <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" font-family="helvetica" font-size="${fontSize}" fill="white">A</text>\n</svg>`;
-//   const blob = new Blob([svg], {type: 'image/svg+xml'});
-//   const url = URL.createObjectURL(blob);
-//   const a = document.createElement('a');
-//   a.href = url;
-//   a.download = 'A.svg';
-//   document.body.appendChild(a);
-//   a.click();
-//   document.body.removeChild(a);
-//   URL.revokeObjectURL(url);
-// }
-
