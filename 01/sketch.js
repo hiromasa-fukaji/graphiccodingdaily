@@ -4,7 +4,7 @@ let bounds;
 
 function preload() {
   // フォントを読み込む
-  myFont = loadFont('CormorantGaramond-bold.ttf');
+  myFont = loadFont('CormorantGaramond-Bold.ttf');
 }
 
 function setup() {
